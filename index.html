@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz TKA Matematika SD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+        :root {
+            --primary: #007bff;
+            --secondary: #ffc107;
+            --bg: #f0f8ff;
+            --text: #333;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .text-center { text-align: center; }
+        .logo { max-width: 120px; margin-bottom: 15px; }
+        h1, h2, h3 { color: var(--primary); }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { font-weight: 600; display: block; margin-bottom: 8px; }
+        input[type="text"] {
+            width: 100%; padding: 12px; border: 2px solid #ddd;
+            border-radius: 10px; font-size: 1.1em; box-sizing: border-box; font-family: inherit;
+        }
+        input[type="text"]:focus { border-color: var(--primary); outline: none; }
+        button {
+            background-color: var(--primary); color: white; border: none;
+            padding: 12px 24px; border-radius: 10px; font-size: 1.1em;
+            cursor: pointer; font-family: inherit; font-weight: 700;
+            transition: transform 0.2s, background 0.2s; margin-top: 10px;
+        }
+        button:hover { background-color: #0056b3; transform: scale(1.02); }
+        button:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
+        .submit-btn { background-color: #28a745; }
+        .submit-btn:hover { background-color: #218838; }
+        .hidden { display: none !important; }
+        .progress-container { margin-bottom: 20px; }
+        .progress-bar { width: 100%; background: #e9ecef; border-radius: 10px; height: 12px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--secondary); transition: width 0.3s; }
+        .question-text { font-size: 1.25em; margin-bottom: 20px; font-weight: 700; line-height: 1.5; color: #2c3e50;}
+        .cerita { background: #fff3cd; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-style: italic; border-left: 5px solid var(--secondary); font-size: 1.1em;}
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-label {
+            background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #eee;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; font-size: 1.1em;
+        }
+        .option-label:hover { border-color: var(--primary); background: #e6f2ff; }
+        .option-label input { margin-right: 15px; transform: scale(1.4); cursor: pointer; }
+        .bs-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 1.1em;}
+        .bs-table th, .bs-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        .bs-table th { background-color: #f8f9fa; }
+        .bs-table td:first-child { text-align: left; width: 65%; }
+        .bs-table input { transform: scale(1.4); cursor: pointer; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .result-score { font-size: 5em; font-weight: 700; margin: 20px 0; color: var(--primary); }
+        .status { font-size: 1.5em; font-weight: 700; padding: 10px 30px; border-radius: 15px; display: inline-block; margin-bottom: 20px; }
+        .tuntas { background: #d4edda; color: #155724; }
+        .belum-tuntas { background: #f8d7da; color: #721c24; }
+        .info-table { width: 100%; max-width: 400px; margin: 0 auto 20px; text-align: left; font-size: 1.2em; }
+        .info-table td { padding: 5px; }
+        .type-badge { display: inline-block; background-color: #e9ecef; padding: 4px 10px; border-radius: 5px; font-size: 0.85em; font-weight: 600; color: #495057; margin-bottom: 10px; }
+        @media (max-width: 600px) {
+            .bs-table td:first-child { font-size: 0.95em; }
+            .option-label { font-size: 1em; padding: 12px; }
+            button { padding: 10px 20px; font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- SCREEN LOGIN -->
+    <div id="login-screen" class="text-center">
+        <img src="466145747_542216861854199_4731265853630591024_n-removebg-preview.png" alt="Logo Pelita Aushaf" class="logo">
+        <h2>Quiz TKA Interaktif</h2>
+        <p style="font-size: 1.1em;">Mata Pelajaran: <strong>Matematika</strong><br>Jenjang: <strong>SD</strong></p>
+        <div class="form-group">
+            <label for="student-name">Nama Lengkap:</label>
+            <input type="text" id="student-name" placeholder="Masukkan nama kamu..." required>
+        </div>
+        <div class="form-group">
+            <label for="student-class">Kelas:</label>
+            <input type="text" id="student-class" placeholder="Contoh: 5A" required>
+        </div>
+        <button onclick="startQuiz()" style="width: 100%; padding: 15px; font-size: 1.2em;">Mulai Quiz</button>
+    </div>
+
+    <!-- SCREEN QUIZ -->
+    <div id="quiz-screen" class="hidden">
+        <div class="progress-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h3 id="question-counter" style="margin: 0; font-size: 1.2em; color: #555;">Soal 1 / 50</h3>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-bar-fill"></div>
+            </div>
+        </div>
+        <div id="question-container"></div>
+        <div class="nav-buttons">
+            <button id="btn-prev" onclick="prevQuestion()" style="background-color: #6c757d;">Sebelumnya</button>
+            <button id="btn-next" onclick="nextQuestion()">Berikutnya</button>
+        </div>
+    </div>
+
+    <!-- SCREEN RESULT -->
+    <div id="result-screen" class="hidden text-center">
+        <img src="466145747_542216861854199_4731265853630591024_n-removebg-preview.png" alt="Logo Pelita Aushaf" class="logo" style="max-width: 90px;">
+        <h2>Hasil Quiz</h2>
+        <table class="info-table">
+            <tr><td>Nama</td><td>: <strong id="res-name"></strong></td></tr>
+            <tr><td>Kelas</td><td>: <strong id="res-class"></strong></td></tr>
+            <tr><td>KKM</td><td>: <strong>70</strong></td></tr>
+        </table>
+        <div class="result-score" id="res-score">100</div>
+        <div id="res-status" class="status tuntas">TUNTAS</div>
+        <br>
+        <button onclick="restartQuiz()" style="background-color: #17a2b8; padding: 12px 30px;">Ulangi Quiz</button>
+    </div>
+</div>
+
+<script>
+const questions = [{"type": "pg", "question": "Hasil dari 250 + 150 - 100 adalah...", "options": ["200", "300", "400", "500"], "answer": "300"}, {"type": "pg", "question": "Hasil pengerjaan dari 12 x 5 : 3 adalah...", "options": ["10", "15", "20", "25"], "answer": "20"}, {"type": "pg", "question": "KPK (Kelipatan Persekutuan Terkecil) dari 12 dan 18 adalah...", "options": ["24", "36", "48", "72"], "answer": "36"}, {"type": "pg", "question": "FPB (Faktor Persekutuan Terbesar) dari 20 dan 30 adalah...", "options": ["5", "10", "15", "20"], "answer": "10"}, {"type": "pg", "question": "Hasil penjumlahan pecahan 1/2 + 1/4 adalah...", "options": ["2/6", "3/4", "1/8", "2/4"], "answer": "3/4"}, {"type": "pg", "question": "Bentuk desimal dari 3/4 adalah...", "options": ["0,25", "0,50", "0,75", "0,80"], "answer": "0,75"}, {"type": "pg", "question": "Luas persegi yang memiliki panjang sisi 8 cm adalah...", "options": ["16 cm²", "32 cm²", "64 cm²", "80 cm²"], "answer": "64 cm²"}, {"type": "pg", "question": "Keliling persegi panjang dengan panjang 10 cm dan lebar 5 cm adalah...", "options": ["15 cm", "30 cm", "50 cm", "60 cm"], "answer": "30 cm"}, {"type": "pg", "question": "Volume kubus yang panjang rusuknya 5 cm adalah...", "options": ["25 cm³", "75 cm³", "125 cm³", "150 cm³"], "answer": "125 cm³"}, {"type": "pg", "question": "2 jam + 30 menit sama dengan berapa menit?", "options": ["120 menit", "150 menit", "180 menit", "230 menit"], "answer": "150 menit"}, {"type": "pg", "cerita": "Budi membeli 5 kotak pensil. Setiap kotak berisi 10 pensil. Kemudian, ia memberikan 8 pensil kepada adiknya.", "question": "Berapa sisa pensil yang dimiliki Budi sekarang?", "options": ["42 pensil", "50 pensil", "58 pensil", "32 pensil"], "answer": "42 pensil"}, {"type": "pg", "question": "Sudut yang besarnya tepat 90 derajat disebut sudut...", "options": ["Lancip", "Tumpul", "Siku-siku", "Lurus"], "answer": "Siku-siku"}, {"type": "pg", "question": "2,5 kilogram sama dengan berapa gram?", "options": ["250 gram", "2.500 gram", "25.000 gram", "25 gram"], "answer": "2.500 gram"}, {"type": "pg", "question": "Jarak dari rumah Ani ke sekolah adalah 3 km. Jarak tersebut sama dengan...", "options": ["30 meter", "300 meter", "3.000 meter", "30.000 meter"], "answer": "3.000 meter"}, {"type": "pg", "question": "15% dari 200 adalah...", "options": ["15", "20", "30", "45"], "answer": "30"}, {"type": "pg", "cerita": "Siti membawa uang Rp 50.000. Ia membeli buku tulis seharga Rp 15.000 dan kotak pensil seharga Rp 12.000.", "question": "Berapa uang kembalian yang diterima Siti?", "options": ["Rp 23.000", "Rp 27.000", "Rp 35.000", "Rp 38.000"], "answer": "Rp 23.000"}, {"type": "pg", "question": "Bangun datar persegi memiliki simetri lipat sebanyak...", "options": ["2", "3", "4", "Tak terhingga"], "answer": "4"}, {"type": "pg", "question": "Sebuah peta memiliki skala 1 : 1.000. Jika jarak pada peta 5 cm, maka jarak sebenarnya adalah...", "options": ["5 meter", "50 meter", "500 meter", "5.000 meter"], "answer": "50 meter"}, {"type": "pg", "question": "Rata-rata dari nilai ulangan 6, 7, 8, 9, 10 adalah...", "options": ["7", "7,5", "8", "8,5"], "answer": "8"}, {"type": "pg", "question": "Angka Romawi dari bilangan 14 adalah...", "options": ["XIIII", "XIV", "XVI", "IXV"], "answer": "XIV"}, {"type": "pg", "question": "1 gros sama dengan berapa buah?", "options": ["12 buah", "20 buah", "144 buah", "500 buah"], "answer": "144 buah"}, {"type": "pg", "question": "Sebuah mobil melaju dengan kecepatan 60 km/jam. Untuk menempuh jarak 120 km, waktu yang dibutuhkan adalah...", "options": ["1 jam", "2 jam", "3 jam", "4 jam"], "answer": "2 jam"}, {"type": "pg", "question": "Bilangan prima terkecil adalah...", "options": ["0", "1", "2", "3"], "answer": "2"}, {"type": "pg", "question": "Pecahan senilai dari 2/3 adalah...", "options": ["4/6", "3/4", "4/9", "6/8"], "answer": "4/6"}, {"type": "pg", "question": "Banyak rusuk pada bangun ruang balok adalah...", "options": ["6", "8", "12", "16"], "answer": "12"}, {"type": "pgk", "question": "Manakah di bawah ini yang termasuk bilangan genap? (Pilih lebih dari satu)", "options": ["12", "15", "28", "31"], "answer": ["12", "28"]}, {"type": "pgk", "question": "Manakah yang merupakan kelipatan dari 5? (Pilih lebih dari satu)", "options": ["15", "22", "35", "41"], "answer": ["15", "35"]}, {"type": "pgk", "question": "Ciri-ciri bangun persegi panjang adalah... (Pilih lebih dari satu)", "options": ["Memiliki 4 sisi sama panjang", "Sisi yang berhadapan sama panjang", "Keempat sudutnya siku-siku", "Memiliki 3 titik sudut"], "answer": ["Sisi yang berhadapan sama panjang", "Keempat sudutnya siku-siku"]}, {"type": "pgk", "question": "Pecahan manakah yang nilainya sama dengan 1/2? (Pilih lebih dari satu)", "options": ["2/4", "3/6", "4/10", "5/10"], "answer": ["2/4", "3/6", "5/10"]}, {"type": "pgk", "question": "Yang termasuk satuan panjang adalah... (Pilih lebih dari satu)", "options": ["Meter", "Gram", "Centimeter", "Liter"], "answer": ["Meter", "Centimeter"]}, {"type": "pgk", "question": "Bilangan prima antara 10 dan 20 adalah... (Pilih lebih dari satu)", "options": ["11", "13", "15", "17"], "answer": ["11", "13", "17"]}, {"type": "pgk", "question": "Bangun datar yang memiliki 4 sisi (segiempat) adalah... (Pilih lebih dari satu)", "options": ["Trapesium", "Jajargenjang", "Segitiga", "Lingkaran"], "answer": ["Trapesium", "Jajargenjang"]}, {"type": "pgk", "question": "Pernyataan waktu yang tepat adalah... (Pilih lebih dari satu)", "options": ["1 jam = 60 menit", "1 menit = 60 detik", "1 hari = 12 jam", "1 minggu = 5 hari"], "answer": ["1 jam = 60 menit", "1 menit = 60 detik"]}, {"type": "pgk", "question": "Manakah yang merupakan kelipatan persekutuan dari 3 dan 4? (Pilih lebih dari satu)", "options": ["12", "18", "24", "30"], "answer": ["12", "24"]}, {"type": "pgk", "question": "Di antara sudut berikut, mana yang termasuk sudut tumpul (>90 derajat)? (Pilih lebih dari satu)", "options": ["45°", "120°", "80°", "150°"], "answer": ["120°", "150°"]}, {"type": "pgk", "question": "Ukuran berat yang lebih besar dari 1 kilogram adalah... (Pilih lebih dari satu)", "options": ["1.500 gram", "500 gram", "2 kg", "10 ons"], "answer": ["1.500 gram", "2 kg"]}, {"type": "pgk", "question": "Operasi hitung mana yang hasilnya adalah 20? (Pilih lebih dari satu)", "options": ["5 x 4", "30 - 15", "10 + 10", "40 : 2"], "answer": ["5 x 4", "10 + 10", "40 : 2"]}, {"type": "pgk", "question": "Sifat bangun ruang tabung adalah... (Pilih lebih dari satu)", "options": ["Memiliki alas berbentuk lingkaran", "Memiliki 3 buah sisi", "Memiliki 8 titik sudut", "Memiliki tutup berbentuk lingkaran"], "answer": ["Memiliki alas berbentuk lingkaran", "Memiliki 3 buah sisi", "Memiliki tutup berbentuk lingkaran"]}, {"type": "pgk", "question": "Faktor dari 12 adalah... (Pilih lebih dari satu)", "options": ["1", "3", "5", "6"], "answer": ["1", "3", "6"]}, {"type": "pgk", "question": "Konversi satuan yang benar adalah... (Pilih lebih dari satu)", "options": ["1 m = 100 cm", "1 km = 1.000 m", "1 kg = 100 gram", "1 liter = 1.000 ml"], "answer": ["1 m = 100 cm", "1 km = 1.000 m", "1 liter = 1.000 ml"]}, {"type": "bs", "question": "Tentukan Benar atau Salah dari operasi hitung dasar berikut!", "statements": [{"text": "10 x 5 = 50", "answer": "benar"}, {"text": "50 : 5 = 5", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah pernyataan mengenai sifat persegi!", "statements": [{"text": "Luas persegi dengan sisi 4 cm adalah 16 cm².", "answer": "benar"}, {"text": "Keliling persegi dengan sisi 4 cm adalah 12 cm.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah dalam membandingkan pecahan berikut!", "statements": [{"text": "1/2 lebih besar daripada 1/4.", "answer": "benar"}, {"text": "1/3 lebih kecil daripada 1/5.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah pernyataan waktu berikut!", "statements": [{"text": "1 tahun sama dengan 12 bulan.", "answer": "benar"}, {"text": "1 bulan selalu terdiri dari tepat 30 hari.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah sifat bangun datar berikut!", "statements": [{"text": "Segitiga memiliki total sudut 180 derajat.", "answer": "benar"}, {"text": "Lingkaran memiliki 4 titik sudut.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah konversi desimal dan persen berikut!", "statements": [{"text": "0,5 sama nilainya dengan 50%.", "answer": "benar"}, {"text": "0,25 sama nilainya dengan 20%.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah tentang FPB dan KPK berikut!", "statements": [{"text": "FPB dari 8 dan 12 adalah 4.", "answer": "benar"}, {"text": "KPK dari 8 dan 12 adalah 12.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah pernyataan bilangan prima berikut!", "statements": [{"text": "Angka 2 adalah satu-satunya bilangan prima genap.", "answer": "benar"}, {"text": "Angka 9 termasuk bilangan prima.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah jenis sudut berikut!", "statements": [{"text": "Sudut 90° disebut sudut siku-siku.", "answer": "benar"}, {"text": "Sudut 180° disebut sudut lancip.", "answer": "salah"}]}, {"type": "bs", "question": "Tentukan Benar atau Salah konversi waktu berikut!", "statements": [{"text": "2 jam sama dengan 120 menit.", "answer": "benar"}, {"text": "3 menit sama dengan 300 detik.", "answer": "salah"}]}];
+let currentQuestionIndex = 0;
+let userAnswers = {};
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function shuffleQuestions() {
+    shuffleArray(questions);
+    questions.forEach(q => {
+        if (q.type === 'pg' || q.type === 'pgk') {
+            shuffleArray(q.options);
+        }
+    });
+}
+
+function startQuiz() {
+    const name = document.getElementById('student-name').value.trim();
+    const kelas = document.getElementById('student-class').value.trim();
+    if (!name || !kelas) {
+        alert('Mohon isi Nama dan Kelas terlebih dahulu!');
+        return;
+    }
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    renderQuestion();
+    updateProgress();
+}
+
+function renderQuestion() {
+    const q = questions[currentQuestionIndex];
+    const container = document.getElementById('question-container');
+    let html = '';
+
+    if (q.type === 'pg') {
+        html += `<span class="type-badge">Pilihan Ganda</span>`;
+    } else if (q.type === 'pgk') {
+        html += `<span class="type-badge">Pilihan Ganda Kompleks</span>`;
+    } else if (q.type === 'bs') {
+        html += `<span class="type-badge">Benar / Salah</span>`;
+    }
+
+    if (q.cerita) {
+        html += `<div class="cerita">${q.cerita}</div>`;
+    }
+    html += `<div class="question-text">${currentQuestionIndex + 1}. ${q.question}</div>`;
+
+    if (q.type === 'pg') {
+        html += '<div class="options">';
+        q.options.forEach((opt, idx) => {
+            const checked = userAnswers[currentQuestionIndex] === opt ? 'checked' : '';
+            html += `
+            <label class="option-label">
+                <input type="radio" name="q${currentQuestionIndex}" value="${opt}" onchange="saveAnswer('${opt}')" ${checked}>
+                ${opt}
+            </label>`;
+        });
+        html += '</div>';
+    } else if (q.type === 'pgk') {
+        html += '<div class="options"><small style="color:#e67e22; margin-bottom: 5px;"><i>Pilih lebih dari satu jawaban yang benar (Kotak Centang)</i></small>';
+        const currentAns = userAnswers[currentQuestionIndex] || [];
+        q.options.forEach((opt, idx) => {
+            const checked = currentAns.includes(opt) ? 'checked' : '';
+            html += `
+            <label class="option-label">
+                <input type="checkbox" value="${opt}" onchange="saveAnswerPGK(this)" ${checked}>
+                ${opt}
+            </label>`;
+        });
+        html += '</div>';
+    } else if (q.type === 'bs') {
+        html += '<table class="bs-table"><tr><th>Pernyataan</th><th>Benar</th><th>Salah</th></tr>';
+        const currentAns = userAnswers[currentQuestionIndex] || {};
+        q.statements.forEach((stmt, idx) => {
+            const isBenar = currentAns[idx] === 'benar' ? 'checked' : '';
+            const isSalah = currentAns[idx] === 'salah' ? 'checked' : '';
+            html += `
+            <tr>
+                <td>${stmt.text}</td>
+                <td><input type="radio" name="bs${currentQuestionIndex}_${idx}" value="benar" onchange="saveAnswerBS(${idx}, 'benar')" ${isBenar}></td>
+                <td><input type="radio" name="bs${currentQuestionIndex}_${idx}" value="salah" onchange="saveAnswerBS(${idx}, 'salah')" ${isSalah}></td>
+            </tr>`;
+        });
+        html += '</table>';
+    }
+
+    container.innerHTML = html;
+
+    document.getElementById('btn-prev').disabled = currentQuestionIndex === 0;
+    if (currentQuestionIndex === questions.length - 1) {
+        document.getElementById('btn-next').innerText = 'Kumpulkan';
+        document.getElementById('btn-next').classList.add('submit-btn');
+    } else {
+        document.getElementById('btn-next').innerText = 'Berikutnya';
+        document.getElementById('btn-next').classList.remove('submit-btn');
+    }
+}
+
+function saveAnswer(val) { userAnswers[currentQuestionIndex] = val; }
+
+function saveAnswerPGK(checkbox) {
+    if (!userAnswers[currentQuestionIndex]) userAnswers[currentQuestionIndex] = [];
+    let arr = userAnswers[currentQuestionIndex];
+    if (checkbox.checked) {
+        if (!arr.includes(checkbox.value)) arr.push(checkbox.value);
+    } else {
+        arr = arr.filter(v => v !== checkbox.value);
+    }
+    userAnswers[currentQuestionIndex] = arr;
+}
+
+function saveAnswerBS(stmtIdx, val) {
+    if (!userAnswers[currentQuestionIndex]) userAnswers[currentQuestionIndex] = {};
+    userAnswers[currentQuestionIndex][stmtIdx] = val;
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex === questions.length - 1) {
+        if (confirm('Apakah kamu yakin ingin mengumpulkan semua jawaban?')) {
+            calculateScore();
+        }
+    } else {
+        currentQuestionIndex++;
+        renderQuestion();
+        updateProgress();
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+        updateProgress();
+    }
+}
+
+function updateProgress() {
+    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+    document.getElementById('progress-bar-fill').style.width = progress + '%';
+    document.getElementById('question-counter').innerText = `Soal ${currentQuestionIndex + 1} / ${questions.length}`;
+}
+
+function calculateScore() {
+    let totalCorrect = 0;
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (!ans) return;
+
+        if (q.type === 'pg') {
+            if (ans === q.answer) totalCorrect++;
+        } else if (q.type === 'pgk') {
+            const correctAns = q.answer;
+            if (ans.length === correctAns.length && ans.every(v => correctAns.includes(v))) {
+                totalCorrect++;
+            }
+        } else if (q.type === 'bs') {
+            let allCorrect = true;
+            q.statements.forEach((stmt, j) => {
+                if (ans[j] !== stmt.answer) allCorrect = false;
+            });
+            // Pastikan semua pernyataan dijawab
+            if (allCorrect && Object.keys(ans).length === q.statements.length) {
+                totalCorrect++;
+            }
+        }
+    });
+
+    const finalScore = Math.round((totalCorrect / questions.length) * 100);
+    showResult(finalScore);
+}
+
+function showResult(finalScore) {
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+
+    document.getElementById('res-name').innerText = document.getElementById('student-name').value;
+    document.getElementById('res-class').innerText = document.getElementById('student-class').value;
+    document.getElementById('res-score').innerText = finalScore;
+
+    const statusEl = document.getElementById('res-status');
+    if (finalScore >= 70) {
+        statusEl.innerText = 'TUNTAS 🎉';
+        statusEl.className = 'status tuntas';
+    } else {
+        statusEl.innerText = 'BELUM TUNTAS 😔';
+        statusEl.className = 'status belum-tuntas';
+    }
+}
+
+function restartQuiz() {
+    currentQuestionIndex = 0;
+    userAnswers = {};
+    shuffleQuestions();
+    document.getElementById('result-screen').classList.add('hidden');
+    document.getElementById('login-screen').classList.remove('hidden');
+}
+
+// Init shuffle on load
+shuffleQuestions();
+</script>
+</body>
+</html>
